@@ -40,6 +40,8 @@ using namespace cocos2d::experimental;
 using namespace CocosDenshion;
 #endif
 
+#define IS_LANDSCAPE false
+
 USING_NS_CC;
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
@@ -51,7 +53,7 @@ AppDelegate::AppDelegate()
 {
 }
 
-AppDelegate::~AppDelegate() 
+AppDelegate::~AppDelegate()
 {
 #if USE_AUDIO_ENGINE
     AudioEngine::end();
@@ -66,11 +68,11 @@ void AppDelegate::initGLContextAttrs()
 {
     // set OpenGL context attributes: red,green,blue,alpha,depth,stencil,multisamplesCount
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
-
+    
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// if you want to use the package manager to install more packages,  
+// if you want to use the package manager to install more packages,
 // don't modify or remove this function
 static int register_all_packages()
 {
@@ -89,47 +91,71 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
         director->setOpenGLView(glview);
     }
-
+    
     // turn on display FPS
     director->setDisplayStats(true);
-
+    
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0f / 60);
-
+    
     // Set the design resolution
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
+    
     auto frameSize = glview->getFrameSize();
+    
     // if the frame's height is larger than the height of medium size.
     if (frameSize.height > mediumResolutionSize.height)
-    {        
+    {
         director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
     }
     // if the frame's height is larger than the height of small size.
     else if (frameSize.height > smallResolutionSize.height)
-    {        
+    {
         director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
     }
     // if the frame's height is smaller than the height of medium size.
     else
-    {        
+    {
         director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
     }
+    
+    /***** CODE ADDED BY TUTORIAL */
+    
+    auto fileUtils = FileUtils::getInstance( );
+    auto screenSize = glview->getFrameSize( );
+    std::vector<std::string> resDirOrders;
+    
+    
+    CCLOG("screenSize.width %f", screenSize.width);
+    CCLOG("screenSize.height %f", screenSize.height);
 
+    
+
+    resDirOrders.push_back( "ipadhd" );
+    resDirOrders.push_back( "ipad" );
+    resDirOrders.push_back( "iphonehd5" );
+    resDirOrders.push_back( "iphonehd" );
+    resDirOrders.push_back( "iphone" );
+    
+    fileUtils->setSearchPaths(resDirOrders);
+    
+    
+    
     register_all_packages();
-
+    
     // create a scene. it's an autorelease object
     auto scene = SplashScene::createScene();
-
+    
     // run
     director->runWithScene(scene);
-
+    
     return true;
 }
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.
 void AppDelegate::applicationDidEnterBackground() {
     Director::getInstance()->stopAnimation();
-
+    
 #if USE_AUDIO_ENGINE
     AudioEngine::pauseAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
@@ -141,7 +167,7 @@ void AppDelegate::applicationDidEnterBackground() {
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground() {
     Director::getInstance()->startAnimation();
-
+    
 #if USE_AUDIO_ENGINE
     AudioEngine::resumeAll();
 #elif USE_SIMPLE_AUDIO_ENGINE
@@ -149,3 +175,4 @@ void AppDelegate::applicationWillEnterForeground() {
     SimpleAudioEngine::getInstance()->resumeAllEffects();
 #endif
 }
+
