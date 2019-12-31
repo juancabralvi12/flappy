@@ -325,8 +325,8 @@
 				84142F5E23B9A5DB00F5054D /* GameOverScene.cpp */,
 				84142F6123B9A5DC00F5054D /* GameOverScene.h */,
 				84142F5D23B9A5DB00F5054D /* GameScene.cpp */,
-				84142F6823B9A6AB00F5054D /* Definitions.h */,
 				84142F5F23B9A5DC00F5054D /* GameScene.h */,
+				84142F6823B9A6AB00F5054D /* Definitions.h */,
 				84142F5C23B9A5DB00F5054D /* MainMenuScene.cpp */,
 				84142F6023B9A5DC00F5054D /* MainMenuScene.h */,
 			);
